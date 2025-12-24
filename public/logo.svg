@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Navora logo: travel tracking — pin, route, and compass mark -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="600" viewBox="0 80 1024 600" role="img" aria-labelledby="title desc">
+  <title id="title">Navora — Travel tracking</title>
+  <desc id="desc">A modern flat logo showing a location pin integrated with a compass and a dotted route, with the word Navora.</desc>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#00A3FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+    <filter id="f1" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- background circle -->
+  <circle cx="512" cy="360" r="260" fill="url(#g1)" filter="url(#f1)"/>
+
+  <!-- dotted route -->
+  <g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M260 660 C340 560, 420 520, 520 500 C620 480, 700 460, 760 380" stroke-dasharray="0 32"/>
+  </g>
+
+  <!-- location pin outer -->
+  <g transform="translate(512,360)">
+    <path d="M0,-180 C90,-180 160,-110 160,-30 C160,80 80,190 0,300 C-80,190 -160,80 -160,-30 C-160,-110 -90,-180 0,-180 Z" fill="#fff" opacity="0.98"/>
+    <!-- inner colored pin -->
+    <path d="M0,-150 C70,-150 120,-100 120,-40 C120,60 60,150 0,240 C-60,150 -120,60 -120,-40 C-120,-100 -70,-150 0,-150 Z" fill="#FF6B4A"/>
+    <!-- pin hole / compass center -->
+    <circle cx="0" cy="-20" r="56" fill="#fff"/>
+    <!-- simple compass needle -->
+    <g transform="translate(0,-20)">
+      <path d="M0,-42 L18,12 L0,6 L-18,12 Z" fill="#FF6B4A"/>
+      <path d="M0,-42 L6,-8 L0,-2 L-6,-8 Z" fill="#0066FF"/>
+    </g>
+  </g>
+
+  <!-- brand text removed: app name will be displayed externally -->
+</svg>
