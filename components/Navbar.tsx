@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { auth } from "@/auth";
+import { Session } from "next-auth";
+
 import { login, logout } from "@/lib/auth-actions";
 
-export default async function Navbar() {
-  const session = await auth();
-
+export default async function Navbar({ session }: { session: Session | null }) {
   return (
     <nav className="bg-white shadow-md py-4 border-b border-gray-200">
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-8">
@@ -14,21 +13,23 @@ export default async function Navbar() {
           <span className="text-2xl font-bold text-gray-800">Navora</span>
         </Link>
         <div className="flex items-center space-x-4">
-          <Link href="/" className="text-slate-900 hover:text-sky-500">
-            My Trips
-          </Link>
-          <Link href="/" className="text-slate-900 hover:text-sky-500">
-            Globe
-          </Link>
           {session ? (
-            <form action={logout}>
-              <button
-                type="submit"
-                className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-sm cursor-pointer"
-              >
-                Sign Out
-              </button>
-            </form>
+            <>
+              <Link href="/" className="text-slate-900 hover:text-sky-500">
+                My Trips
+              </Link>
+              <Link href="/" className="text-slate-900 hover:text-sky-500">
+                Globe
+              </Link>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-sm cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </form>
+            </>
           ) : (
             <form action={login}>
               <button
