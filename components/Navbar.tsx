@@ -15,7 +15,7 @@ export default async function Navbar({ session }: { session: Session | null }) {
         <div className="flex items-center space-x-4">
           {session ? (
             <>
-              <Link href="/" className="text-slate-900 hover:text-sky-500">
+              <Link href="/trips" className="text-slate-900 hover:text-sky-500">
                 My Trips
               </Link>
               <Link href="/" className="text-slate-900 hover:text-sky-500">
