@@ -1,6 +1,8 @@
 @import "tailwindcss";
-/* @import "uploadthing/tw/v4"; */
+
+@import "uploadthing/tw/v4";
 @source "../node_modules/@uploadthing/react/dist"; /** <-- depends on your project structure */
+/* @import "uploadthing/tw/v4"; */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
