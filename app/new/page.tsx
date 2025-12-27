@@ -1,16 +1,31 @@
-import React from "react";
+"use client";
+import { createTrip } from "@/lib/actions/createTrip";
 import { Card, CardHeader, CardContent } from "@/components/ui/Cards";
-// import { UploadButton } from "@/lib/upload-thing";
+import { UploadButton } from "@/lib/upload-thing";
 import { Button } from "@/components/ui/Buttons";
+import { useTransition, useState } from "react";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 const NewTrip = () => {
+  const [isPending, startTransition] = useTransition();
+  const [imageUrl, setImageUrl] = useState<string>("");
   return (
     <div className="max-w-lg mx-auto mt-10">
       <Card>
         <CardHeader>New Trip</CardHeader>
         <CardContent>
-          <form className="space-y-6">
+          <form
+            className="space-y-6"
+            action={(formData: FormData) => {
+              if (imageUrl) {
+                formData.append("imageUrl", imageUrl);
+              }
+              startTransition(() => {
+                createTrip(formData);
+              });
+            }}
+          >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {" "}
@@ -72,8 +87,31 @@ const NewTrip = () => {
             </div>
             <div>
               <label> Trip Image</label>
+
+              {imageUrl && (
+                <Image
+                  src={imageUrl}
+                  alt="Trip Preview"
+                  className="w-full mb-4 rounded-md max-h-48 object-cover"
+                  width={300}
+                  height={100}
+                />
+              )}
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  if (res && res[0].ufsUrl) {
+                    setImageUrl(res[0].ufsUrl);
+                  }
+                }}
+                onUploadError={(error: Error) => {
+                  console.error("Upload error: ", error);
+                }}
+              />
             </div>
-            <Button type="submit" className="w-full"></Button>
+            <Button type="submit" disabled={isPending} className="w-full">
+              {isPending ? "Creating..." : "Create Trip"}
+            </Button>
           </form>
         </CardContent>
       </Card>
