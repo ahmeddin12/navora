@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@/auth";
-import { prisma } from "../prisma";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export async function createTrip(formData: FormData) {
