@@ -6,7 +6,11 @@ import Link from "next/link";
 import { Button } from "./ui/Buttons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs";
 import { useState } from "react";
-import Map from "@/components/Map";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-gray-100 animate-pulse flex items-center justify-center">Loading Map...</div>
+});
 import SortableItinerary from "./sortable-itinerary";
 
 export type TripWithLocation = Trip & {

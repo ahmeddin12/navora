@@ -5,16 +5,23 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 async function geocodeAddress(address: string) {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY!;
   const response = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
-    )}&key=${apiKey}`
+    )}&limit=1`,
+    {
+      headers: {
+        "User-Agent": "NavoraApp/1.0",
+      },
+    }
   );
 
   const data = await response.json();
-  const { lat, lng } = data.results[0].geometry.location;
-  return { lat, lng };
+  if (!data || data.length === 0) {
+    throw new Error("Address not found");
+  }
+  const { lat, lon } = data[0];
+  return { lat: parseFloat(lat), lng: parseFloat(lon) };
 }
 
 export async function addLocation(formData: FormData, tripId: string) {
@@ -24,11 +31,22 @@ export async function addLocation(formData: FormData, tripId: string) {
   }
 
   const address = formData.get("address")?.toString();
-  if (!address) {
-    throw new Error("Missing address");
-  }
+  const latStr = formData.get("lat")?.toString();
+  const lngStr = formData.get("lng")?.toString();
 
-  const { lat, lng } = await geocodeAddress(address);
+  let lat: number;
+  let lng: number;
+
+  if (latStr && lngStr) {
+    lat = parseFloat(latStr);
+    lng = parseFloat(lngStr);
+  } else if (address) {
+    const coords = await geocodeAddress(address);
+    lat = coords.lat;
+    lng = coords.lng;
+  } else {
+    throw new Error("Missing address or coordinates");
+  }
 
   const count = await prisma.location.count({
     where: { tripId },
@@ -36,7 +54,7 @@ export async function addLocation(formData: FormData, tripId: string) {
 
   await prisma.location.create({
     data: {
-      locationTitle: address,
+      locationTitle: address || `${lat}, ${lng}`,
       lat,
       lng,
       tripId,
